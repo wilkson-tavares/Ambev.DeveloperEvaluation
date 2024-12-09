@@ -15,5 +15,8 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include="src\Ambev.DeveloperEvaluation.WebApi\Features\Customers\GetCustomer\GetCustomerRequest.cs" />
+    <None Include="src\Ambev.DeveloperEvaluation.WebApi\Features\Customers\GetCustomer\GetCustomerRequestValidator.cs" />
+    <None Include="src\Ambev.DeveloperEvaluation.WebApi\Features\Customers\GetCustomer\GetCustomerResponse.cs" />
   </ItemGroup>
 </Project>

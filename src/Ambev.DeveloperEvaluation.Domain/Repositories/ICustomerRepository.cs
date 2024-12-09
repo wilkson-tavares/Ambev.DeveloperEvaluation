@@ -29,6 +29,14 @@ public interface ICustomerRepository
     Task<Customer?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Retrieves a customer by Name
+    /// </summary>
+    /// <param name="name">The name identifier of the customer</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The customer if found, null otherwise</returns>
+    Task<Customer?> GetByNameAsync(string name, CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Retrieves all customers
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>

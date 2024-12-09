@@ -50,6 +50,17 @@ public class CustomerRepository : ICustomerRepository
     }
 
     /// <summary>
+    /// Retrieves a customer by Name
+    /// </summary>
+    /// <param name="name">The name identifier of the customer</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The customer if found, null otherwise</returns>
+    public async Task<Customer?> GetByNameAsync(string name, CancellationToken cancellationToken = default)
+    {
+        return await _context.Customers.FirstOrDefaultAsync(c => c.Name == name, cancellationToken);
+    }
+
+    /// <summary>
     /// Retrieves all customers
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
