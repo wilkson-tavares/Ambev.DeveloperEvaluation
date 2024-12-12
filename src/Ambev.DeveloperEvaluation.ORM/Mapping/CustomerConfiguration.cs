@@ -18,7 +18,6 @@ public class CustomerConfiguration : IEntityTypeConfiguration<Customer>
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Id).HasColumnType("uuid").HasDefaultValueSql("gen_random_uuid()");
 
-        builder.Property(c => c.CustomerId).IsRequired();
         builder.Property(c => c.Name).IsRequired().HasMaxLength(100);
 
         builder.Property(c => c.CreatedAt).IsRequired();

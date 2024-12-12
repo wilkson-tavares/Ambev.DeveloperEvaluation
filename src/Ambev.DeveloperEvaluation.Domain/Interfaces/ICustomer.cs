@@ -8,7 +8,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Interfaces
 {
     public interface ICustomer
     {
-        int CustomerId { get; }
         string Name { get; }
     }
 }
