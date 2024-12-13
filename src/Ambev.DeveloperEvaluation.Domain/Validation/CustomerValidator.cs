@@ -12,10 +12,6 @@ namespace Ambev.DeveloperEvaluation.Domain.Validation
     {
         public CustomerValidator()
         {
-            RuleFor(customer => customer.CustomerId)
-                .GreaterThan(0)
-                .WithMessage("Customer ID must be greater than 0.");
-
             RuleFor(customer => customer.Name)
                 .NotEmpty()
                 .WithMessage("Customer name must not be empty.");
