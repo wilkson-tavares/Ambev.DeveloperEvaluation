@@ -1,11 +1,12 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
 /// <summary>
-/// Represents an item in a sale transaction.
+/// Represents an item in a cart transaction.
 /// </summary>
-public class SaleItem : BaseEntity
+public class CartItem : BaseEntity
 {
     /// <summary>
     /// Gets or sets the unique identifier of the product.
@@ -15,6 +16,7 @@ public class SaleItem : BaseEntity
     /// <summary>
     /// Gets or sets the name of the product.
     /// </summary>
+    [NotMapped]
     public string ProductName { get; set; } = string.Empty;
 
     /// <summary>
@@ -28,22 +30,22 @@ public class SaleItem : BaseEntity
     public decimal UnitPrice { get; set; }
 
     /// <summary>
-    /// Gets or sets the discount applied to the sale item.
+    /// Gets or sets the discount applied to the cart item.
     /// </summary>
     public decimal Discount { get; set; }
 
     /// <summary>
-    /// Gets or sets the total price of the sale item after applying the discount.
+    /// Gets or sets the total price of the cart item after applying the discount.
     /// </summary>
     public decimal TotalPrice { get; set; }
 
     
-    // Foreign key to Sale
-    public Guid SaleId { get; set; }
-    public Sale Sale { get; set; }
+    // Foreign key to Cart
+    public Guid CartId { get; set; }
+    public Cart Cart { get; set; }
     
     /// <summary>
-    /// Calculates the total price of the sale item based on the quantity and unit price,
+    /// Calculates the total price of the cart item based on the quantity and unit price,
     /// and applies the appropriate discount based on the quantity.
     /// </summary>
     /// <exception cref="DomainException">
