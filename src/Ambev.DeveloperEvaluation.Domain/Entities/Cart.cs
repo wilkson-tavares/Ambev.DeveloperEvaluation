@@ -1,23 +1,24 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using Ambev.DeveloperEvaluation.Domain.Common;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
 
 /// <summary>
-/// Represents a sale transaction in the system.
+/// Represents a cart transaction in the system.
 /// </summary>
-public class Sale : BaseEntity
+public class Cart : BaseEntity
 {
     /// <summary>
-    /// Gets or sets the sale number.
+    /// Gets or sets the cart number.
     /// </summary>
-    public string SaleNumber { get; set; } = string.Empty;
+    public string Number { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the date when the sale was made.
+    /// Gets or sets the date when the cart was made.
     /// </summary>
-    public DateTime SaleDate { get; set; }
+    public DateTime CreateDate { get; set; }
 
     /// <summary>
     /// Gets or sets the unique identifier of the customer.
@@ -27,17 +28,13 @@ public class Sale : BaseEntity
     /// <summary>
     /// Gets or sets the name of the customer.
     /// </summary>
+    [NotMapped]
     public string UserName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the total amount of the sale.
+    /// Gets or sets the total amount of the cart.
     /// </summary>
     public decimal TotalAmount { get; set; }
-
-    /// <summary>
-    /// Gets or sets the unique identifier of the branch where the sale was made.
-    /// </summary>
-    public Guid BranchId { get; set; }
 
     /// <summary>
     /// Gets or sets the name of the branch.
@@ -45,20 +42,20 @@ public class Sale : BaseEntity
     public string BranchName { get; set; } = string.Empty;
 
     /// <summary>
-    /// Gets or sets the list of items in the sale.
+    /// Gets or sets the list of items in the cart.
     /// </summary>
-    public List<SaleItem> Items { get; set; } = new List<SaleItem>();
+    public List<CartItem> Items { get; set; } = new List<CartItem>();
 
     /// <summary>
-    /// Gets or sets a value indicating whether the sale is cancelled.
+    /// Gets or sets a value indicating whether the cart is cancelled.
     /// </summary>
     public bool IsCancelled { get; set; }
     
     /// <summary>
-    /// Adds an item to the sale.
+    /// Adds an item to the cart.
     /// </summary>
     /// <param name="item">The item to add.</param>
-    public void AddItem(SaleItem item)
+    public void AddItem(CartItem item)
     {
         item.CalculateTotalPrice();
         Items.Add(item);
@@ -66,7 +63,7 @@ public class Sale : BaseEntity
     }
 
     /// <summary>
-    /// Cancels the sale.
+    /// Cancels the cart.
     /// </summary>
     public void Cancel()
     {
@@ -74,7 +71,7 @@ public class Sale : BaseEntity
     }
 
     /// <summary>
-    /// Calculates the total amount of the sale.
+    /// Calculates the total amount of the cart.
     /// </summary>
     private void CalculateTotalAmount()
     {

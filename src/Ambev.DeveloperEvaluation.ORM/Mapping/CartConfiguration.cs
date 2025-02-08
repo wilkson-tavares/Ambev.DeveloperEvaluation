@@ -5,22 +5,21 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Ambev.DeveloperEvaluation.ORM.Mapping;
 
-public class SaleConfiguration : IEntityTypeConfiguration<Sale>
+public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {
-    public void Configure(EntityTypeBuilder<Sale> builder)
+    public void Configure(EntityTypeBuilder<Cart> builder)
     {
         builder.HasKey(s => s.Id);
         builder.Property(s => s.UserId).IsRequired();
-        builder.Property(s => s.UserName).IsRequired().HasMaxLength(100);
-        builder.Property(s => s.SaleNumber).IsRequired().HasMaxLength(50);
-        builder.Property(s => s.SaleDate).IsRequired();
+        builder.Property(s => s.Number).IsRequired().HasMaxLength(50);
+        builder.Property(s => s.CreateDate).IsRequired();
         builder.Property(s => s.TotalAmount).HasColumnType("decimal(18,2)");
         builder.Property(s => s.BranchName).HasMaxLength(100);
         
-        // Configure the relationship with SaleItem
+        // Configure the relationship with CartItem
         builder.HasMany(s => s.Items)
-            .WithOne(si => si.Sale)
-            .HasForeignKey(si => si.SaleId);
+            .WithOne(si => si.Cart)
+            .HasForeignKey(si => si.CartId);
         
         // Configure the relationship with Product
         builder.HasOne<User>()
