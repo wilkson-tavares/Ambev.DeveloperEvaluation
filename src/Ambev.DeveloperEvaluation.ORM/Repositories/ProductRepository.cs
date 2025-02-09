@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -43,15 +44,36 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
         {
             return await _context.Set<Product>().FindAsync(new object[] { id }, cancellationToken);
         }
+        
+        /// <summary>
+        /// Retrieves a product by title
+        /// </summary>
+        /// <param name="title">The title of the product</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>The product if found, null otherwise</returns>
+        public async Task<Product?> GetByTitleAsync(string title, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Product>().FirstOrDefaultAsync(p => p.Title == title, cancellationToken);
+        }
 
         /// <summary>
         /// Retrieves all products from the repository
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A collection of all products</returns>
-        public async Task<IEnumerable<Product>> GetAllAsync(CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<Product>> GetAllAsync(int page, int size, string order, CancellationToken cancellationToken = default)
         {
-            return await _context.Set<Product>().ToListAsync(cancellationToken);
+            var query = _context.Set<Product>().AsQueryable();
+
+            if (!string.IsNullOrEmpty(order))
+                query = query.OrderBy(order);
+
+            return await query.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
+        }
+        
+        public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Product>().CountAsync(cancellationToken);
         }
 
         /// <summary>
@@ -59,7 +81,7 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
         /// </summary>
         /// <param name="product">The product to update</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>The updated product</returns>
+        /// <returns>The updated product</returns>'
         public async Task<Product> UpdateAsync(Product product, CancellationToken cancellationToken = default)
         {
             _context.Set<Product>().Update(product);
@@ -82,5 +104,37 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
             _context.Set<Product>().Remove(product);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
+        }
+        
+        /// <summary>
+        /// Retrieves a distinct list of product categories from the repository.
+        /// </summary>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>A collection of unique product categories</returns>
+        public async Task<IEnumerable<string>> GetCategoriesAsync(CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Product>().Select(p => p.Category).Distinct().ToListAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Retrieves a list of products by their category.
+        /// </summary>
+        /// <param name="category">The category of the products to retrieve.</param>
+        /// <param name="cancellationToken">Cancellation token to cancel the operation.</param>
+        /// <returns>A collection of products that belong to the specified category.</returns>
+        public async Task<IEnumerable<Product>> GetByCategoryAsync(string category, int page, int size, string order,
+            CancellationToken cancellationToken = default)
+        {
+            var query = _context.Set<Product>().Where(p => p.Category == category);
+
+            if (!string.IsNullOrEmpty(order))
+                query = query.OrderBy(order);
+
+            return await query.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
+        }
+        
+        public async Task<int> CountByCategoryAsync(string category, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<Product>().CountAsync(p => p.Category == category, cancellationToken);
         }
     }
