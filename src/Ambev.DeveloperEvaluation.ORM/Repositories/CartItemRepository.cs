@@ -43,6 +43,11 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
         {
             return await _context.Set<CartItem>().FindAsync(new object[] { id }, cancellationToken);
         }
+        
+        public async Task<IEnumerable<CartItem>> GetByCartIdAsync(Guid CartId, CancellationToken cancellationToken = default)
+        {
+            return await _context.Set<CartItem>().Where(c => c.CartId == CartId).ToListAsync(cancellationToken);
+        }
 
         /// <summary>
         /// Retrieves all cart items from the repository
@@ -74,12 +79,23 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>True if the cart item was deleted, false if not found</returns>
         public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+                 {
+                     var cartItem = await _context.Set<CartItem>().FindAsync(new object[] { id }, cancellationToken);
+                     if (cartItem == null)
+                         return false;
+         
+                     _context.Set<CartItem>().Remove(cartItem);
+                     await _context.SaveChangesAsync(cancellationToken);
+                     return true;
+                 }
+        
+        public async Task<bool> DeleteByCartIdAsync(Guid CartId, CancellationToken cancellationToken = default)
         {
-            var cartItem = await _context.Set<CartItem>().FindAsync(new object[] { id }, cancellationToken);
-            if (cartItem == null)
+            var cartItems = await GetByCartIdAsync(CartId);
+            if (!cartItems.Any())
                 return false;
 
-            _context.Set<CartItem>().Remove(cartItem);
+            _context.Set<CartItem>().RemoveRange(cartItems);
             await _context.SaveChangesAsync(cancellationToken);
             return true;
         }

@@ -30,7 +30,7 @@ public class ListProductsByCategoryHandler : IRequestHandler<ListProductsByCateg
         
         return new ListProductsByCategoryResult
         {
-            Data = products.Select(p => _mapper.Map<ListProductsByCategoryProductResult>(p)).ToList(),
+            Data = products.Select(p => _mapper.Map<ListProductsByCategoryProductDto>(p)).ToList(),
             TotalItems = totalItems,
             TotalPages = totalPages
         };

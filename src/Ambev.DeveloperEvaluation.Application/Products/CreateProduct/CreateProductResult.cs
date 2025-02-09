@@ -1,3 +1,5 @@
+using Ambev.DeveloperEvaluation.Domain.ValueObjects;
+
 namespace Ambev.DeveloperEvaluation.Application.Products.CreateProduct;
 
 /// <summary>
@@ -32,4 +34,10 @@ public class CreateProductResult
     /// </summary>
     /// <value>A string representing the description of the product.</value>
     public string Description { get; set; } = String.Empty;
+
+    public string Category { get; set; }
+
+    public string Image { get; set; }
+
+    public Rating Rating { get; set; }
 }

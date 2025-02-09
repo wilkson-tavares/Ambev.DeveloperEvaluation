@@ -8,7 +8,7 @@ public class ListProductsByCategoryProfile : Profile
 {
     public ListProductsByCategoryProfile()
     {
-        CreateMap<Product, ListProductsByCategoryProductResult>()
+        CreateMap<Product, ListProductsByCategoryProductDto>()
             .ForMember(dest => 
                 dest.Rating, 
                 opt => 

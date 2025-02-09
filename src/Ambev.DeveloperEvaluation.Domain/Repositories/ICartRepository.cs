@@ -23,12 +23,16 @@ public interface ICartRepository
     /// <returns>The cart if found, null otherwise</returns>
     Task<Cart?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+    Task<Cart?> GetByUserIdAsync(Guid UserId, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieves all carts from the repository
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A collection of all carts</returns>
-    Task<IEnumerable<Cart>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<Cart>> GetAllAsync(int page, int size, string order, CancellationToken cancellationToken = default);
+
+    Task<int> CountAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Updates an existing cart in the repository
