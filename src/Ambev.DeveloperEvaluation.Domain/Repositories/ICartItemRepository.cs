@@ -23,6 +23,8 @@ public interface ICartItemRepository
     /// <returns>The cart item if found, null otherwise</returns>
     Task<CartItem?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
 
+    Task<IEnumerable<CartItem>> GetByCartIdAsync(Guid CartId, CancellationToken cancellationToken = default);
+
     /// <summary>
     /// Retrieves all cart items from the repository
     /// </summary>
@@ -45,4 +47,6 @@ public interface ICartItemRepository
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>True if the cart item was deleted, false if not found</returns>
     Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+
+    Task<bool> DeleteByCartIdAsync(Guid CartId, CancellationToken cancellationToken = default);
 }

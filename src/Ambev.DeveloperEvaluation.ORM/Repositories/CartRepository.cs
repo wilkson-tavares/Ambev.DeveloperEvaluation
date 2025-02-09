@@ -1,6 +1,7 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Dynamic.Core;
 
 namespace Ambev.DeveloperEvaluation.ORM.Repositories;
 
@@ -45,17 +46,32 @@ public class CartRepository : ICartRepository
             .Include(s => s.Items)
             .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
     }
+    
+    public async Task<Cart?> GetByUserIdAsync(Guid UserId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Set<Cart>()
+            .Include(s => s.Items)
+            .FirstOrDefaultAsync(s => s.UserId == UserId && !s.IsCancelled, cancellationToken);
+    }
 
     /// <summary>
     /// Retrieves all carts from the repository
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A collection of all carts</returns>
-    public async Task<IEnumerable<Cart>> GetAllAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Cart>> GetAllAsync(int page, int size, string order, CancellationToken cancellationToken = default)
     {
-        return await _context.Set<Cart>()
-            .Include(s => s.Items)
-            .ToListAsync(cancellationToken);
+        var query = _context.Set<Cart>().AsQueryable();
+
+        if (!string.IsNullOrEmpty(order))
+            query = query.OrderBy(order);
+
+        return await query.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
+    }
+    
+    public async Task<int> CountAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.Set<Cart>().CountAsync(cancellationToken);
     }
 
     /// <summary>

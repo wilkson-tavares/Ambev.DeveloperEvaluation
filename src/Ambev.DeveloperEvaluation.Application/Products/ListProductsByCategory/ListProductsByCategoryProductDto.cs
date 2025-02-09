@@ -2,7 +2,7 @@ using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.ListProductsByCategory;
 
-public class ListProductsByCategoryProductResult
+public class ListProductsByCategoryProductDto
 {
     public Guid Id { get; set; }
     public string Title { get; set; }

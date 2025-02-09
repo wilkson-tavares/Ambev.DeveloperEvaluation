@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Application.Common;
 using MediatR;
 
 namespace Ambev.DeveloperEvaluation.Application.Products.ListCategories;
@@ -5,6 +6,6 @@ namespace Ambev.DeveloperEvaluation.Application.Products.ListCategories;
 /// <summary>
 /// Query for listing product categories
 /// </summary>
-public class ListCategoriesCommand : IRequest<ListCategoriesResult>
+public class ListCategoriesCommand : PaginatedCommand, IRequest<ListCategoriesResult>
 {
 }
