@@ -33,15 +33,11 @@ public class ListCategoriesHandler : IRequestHandler<ListCategoriesCommand, List
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
-        var categories = await _productRepository.GetCategoriesAsync(request.Page, request.Size, request.Order, cancellationToken);
-        var totalItems = await _productRepository.CountCategoriesAsync(cancellationToken);
-        var totalPages = (int)Math.Ceiling((double)totalItems / request.Size);
+        var categories = await _productRepository.GetCategoriesAsync(cancellationToken);
         
         return new ListCategoriesResult
         {
-            Categories = categories.ToList(),
-            TotalItems = totalItems,
-            TotalPages = totalPages
+            Categories = categories.ToList()
         };
     }
 }

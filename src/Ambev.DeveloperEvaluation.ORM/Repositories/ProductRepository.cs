@@ -111,19 +111,9 @@ namespace Ambev.DeveloperEvaluation.ORM.Repositories;
         /// </summary>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A collection of unique product categories</returns>
-        public async Task<IEnumerable<string>> GetCategoriesAsync(int page, int size, string order, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<string>> GetCategoriesAsync(CancellationToken cancellationToken = default)
         {
-            var query = _context.Set<Product>().Select(p => p.Category).Distinct().AsQueryable();
-            
-            if (!string.IsNullOrEmpty(order))
-                query = query.OrderBy(order);
-            
-            return await query.Skip((page - 1) * size).Take(size).ToListAsync(cancellationToken);
-        }
-        
-        public async Task<int> CountCategoriesAsync(CancellationToken cancellationToken = default)
-        {
-            return await _context.Set<Product>().Select(p => p.Category).Distinct().CountAsync(cancellationToken);
+            return await _context.Set<Product>().Select(p => p.Category).Distinct().ToListAsync();
         }
 
         /// <summary>

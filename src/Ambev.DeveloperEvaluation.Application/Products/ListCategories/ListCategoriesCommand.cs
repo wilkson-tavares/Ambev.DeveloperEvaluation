@@ -6,6 +6,6 @@ namespace Ambev.DeveloperEvaluation.Application.Products.ListCategories;
 /// <summary>
 /// Query for listing product categories
 /// </summary>
-public class ListCategoriesCommand : PaginatedCommand, IRequest<ListCategoriesResult>
+public class ListCategoriesCommand : IRequest<ListCategoriesResult>
 {
 }
