@@ -61,10 +61,7 @@ public interface IProductRepository
     /// </summary>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>A collection of unique product categories</returns>
-    Task<IEnumerable<string>> GetCategoriesAsync(int page, int size, string order,
-        CancellationToken cancellationToken = default);
-
-    Task<int> CountCategoriesAsync(CancellationToken cancellationToken = default);
+    Task<IEnumerable<string>> GetCategoriesAsync(CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Retrieves a list of products by their category.
