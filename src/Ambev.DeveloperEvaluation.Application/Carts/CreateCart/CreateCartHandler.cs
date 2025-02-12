@@ -35,7 +35,8 @@ public class CreateCartHandler : IRequestHandler<CreateCartCommand, CreateCartRe
         var cart = _mapper.Map<Cart>(command);
         var createdCart = await _cartRepository.CreateAsync(cart, cancellationToken);
         
-        var createCartItemCommand = new CreateCartItemsCommand(createdCart.Id, _mapper.Map<List<CreateCartItemsDto>>(createdCart.Items));
+        cart.Items = _mapper.Map<List<CartItem>>(command.Products);
+        var createCartItemCommand = new CreateCartItemsCommand(createdCart.Id, _mapper.Map<List<CreateCartItemsDto>>(cart.Items));
         await _mediator.Send(createCartItemCommand, cancellationToken);
         
         var result = _mapper.Map<CreateCartResult>(createdCart);
