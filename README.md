@@ -1,86 +1,94 @@
 # Developer Evaluation Project
 
-`READ CAREFULLY`
+API (CRUD completo) que manipula registros de vendas. A API precisa ser capaz de informar:
 
-## Instructions
-**The test below will have up to 7 calendar days to be delivered from the date of receipt of this manual.**
+- Número de venda
+- Data em que a venda foi realizada
+- Cliente
+- Valor total da venda
+- Filial onde foi efetuada a venda
+- Produtos
+- Quantidades
+- Preços unitários
+- Descontos
+- Valor total de cada item
+- Cancelado/Não Cancelado
 
-- The code must be versioned in a public Github repository and a link must be sent for evaluation once completed
-- Upload this template to your repository and start working from it
-- Read the instructions carefully and make sure all requirements are being addressed
-- The repository must provide instructions on how to configure, execute and test the project
-- Documentation and overall organization will also be taken into consideration
+## Arquitetura
 
-## Use Case
-**You are a developer on the DeveloperStore team. Now we need to implement the API prototypes.**
+A arquitetura deste projeto segue os princípios do SOLID, DDD (Domain-Driven Design) e Clean Architecture. A estrutura do projeto está organizada em camadas que separam as responsabilidades de forma clara e coesa. 
+Aqui está uma descrição das principais camadas e componentes:
 
-As we work with `DDD`, to reference entities from other domains, we use the `External Identities` pattern with denormalization of entity descriptions.
+1. **Camada de Apresentação (Presentation Layer):**
+   - Contém a API que expõe os endpoints para interação com o sistema.
+   - Utiliza o Swagger para documentação dos endpoints.
 
-Therefore, you will write an API (complete CRUD) that handles sales records. The API needs to be able to inform:
+2. **Camada de Aplicação (Application Layer):**
+   - Contém a lógica de aplicação e orquestração de operações.
+   - Define interfaces para serviços que são implementados na camada de infraestrutura.
+   
+3. **Camada de Domínio (Domain Layer):**
+   - Contém as entidades de domínio, agregados, value objects e regras de negócio.
+   - Implementa validações e lógica de negócio central.
 
-* Sale number
-* Date when the sale was made
-* Customer
-* Total sale amount
-* Branch where the sale was made
-* Products
-* Quantities
-* Unit prices
-* Discounts
-* Total amount for each item
-* Cancelled/Not Cancelled
+4. **Camada de Infraestrutura (Infrastructure Layer):**
+   - Contém implementações de serviços, repositórios e acesso a dados.
+   - Implementa a persistência de dados utilizando Entity Framework Core e SQLite.
 
-It's not mandatory, but it would be a differential to build code for publishing events of:
-* SaleCreated
-* SaleModified
-* SaleCancelled
-* ItemCancelled
+5. **Camada de Testes (Test Layer):**
+   - Contém testes unitários e de integração para garantir a qualidade do código.
+   - Utiliza frameworks de teste como xUnit e bibliotecas como Moq para mocks.
 
-If you write the code, **it's not required** to actually publish to any Message Broker. You can log a message in the application log or however you find most convenient.
+## Princípios e Padrões Utilizados
 
-### Business Rules
+   - **SOLID:** Princípios de design orientados a objetos que promovem a coesão e reduzem o acoplamento.
+   - **DDD (Domain-Driven Design):** Foco no domínio e na lógica de negócio central, utilizando entidades, agregados e value objects.
+   - **Clean Architecture:** Separação de responsabilidades em camadas, onde a camada de domínio é independente de detalhes de implementação.
 
-* Purchases above 4 identical items have a 10% discount
-* Purchases between 10 and 20 identical items have a 20% discount
-* It's not possible to sell above 20 identical items
-* Purchases below 4 items cannot have a discount
+## Fluxo de Dados
 
-These business rules define quantity-based discounting tiers and limitations:
+   1. **Requisição:** A API recebe uma requisição HTTP.
+   2.  **Aplicação:** A camada de aplicação processa a requisição, chamando os serviços necessários.
+   3. **Domínio:** A lógica de negócio é aplicada utilizando as entidades e regras de domínio.
+   4. **Infraestrutura:** A camada de infraestrutura persiste ou recupera dados do banco de dados.
+   5. **Resposta:** A resposta é enviada de volta ao cliente através da API.
 
-1. Discount Tiers:
-   - 4+ items: 10% discount
-   - 10-20 items: 20% discount
+Esta arquitetura permite uma fácil manutenção e escalabilidade, além de promover a reutilização de código e a separação de responsabilidades.
 
-2. Restrictions:
-   - Maximum limit: 20 items per product
-   - No discounts allowed for quantities below 4 items
+## Tecnologias Utilizadas
 
-## Overview
-This section provides a high-level overview of the project and the various skills and competencies it aims to assess for developer candidates. 
+   - C#: Linguagem de programação principal utilizada no projeto.
+   - .NET 9: Framework para desenvolvimento de aplicações.
+   - Entity Framework Core: ORM (Object-Relational Mapping) para acesso a dados.
+   - MediatR: Biblioteca para implementação do padrão Mediator.
+   - AutoMapper: Biblioteca para mapeamento de objetos.
+   - SQLite: Banco de dados utilizado para persistência de dados.
+   - xUnit: Framework de testes unitários.
+   - Moq: Biblioteca para criação de mocks em testes.
+   - Bogus: Biblioteca para geração de dados falsos para testes.
+   - FluentValidation: Biblioteca para validação de objetos.
+   - Swagger: Ferramenta para documentação de APIs.
+   - JetBrains Rider: IDE utilizada para desenvolvimento.
 
-See [Overview](/.doc/overview.md)
+## Como Executar
 
-## Tech Stack
-This section lists the key technologies used in the project, including the backend, testing, frontend, and database components. 
+Para executar a API vamos utilizar o Docker e aplicar as migrations, siga os passos abaixo:  
 
-See [Tech Stack](/.doc/tech-stack.md)
+   1. **Certifique-se de que o Docker e o Docker Compose estão instalados:**  
+      - Verifique se o Docker está instalado executando docker --version.
+      - Verifique se o Docker Compose está instalado executando docker-compose --version.
 
-## Frameworks
-This section outlines the frameworks and libraries that are leveraged in the project to enhance development productivity and maintainability. 
+   2. **Construa e inicie os contêineres:**  
+      - Navegue até o diretório raiz do projeto onde o arquivo docker-compose.yml está localizado.
+      - Execute o comando para construir e iniciar os contêineres: docker-compose up --build
 
-See [Frameworks](/.doc/frameworks.md)
+   
+   3. **Aplique as migrations:**  
+      - Abra um novo terminal e execute o comando abaixo para acessar o contêiner da API:
+      - docker exec -it ambev_developer_evaluation_webapi /bin/bash
+      - Dentro do contêiner, aplique as migrations executando o comando: dotnet ef database update
 
-<!-- 
-## API Structure
-This section includes links to the detailed documentation for the different API resources:
-- [API General](./docs/general-api.md)
-- [Products API](/.doc/products-api.md)
-- [Carts API](/.doc/carts-api.md)
-- [Users API](/.doc/users-api.md)
-- [Auth API](/.doc/auth-api.md)
--->
-
-## Project Structure
-This section describes the overall structure and organization of the project files and directories. 
-
-See [Project Structure](/.doc/project-structure.md)
+       
+   4. **Verifique se a API está em execução:**  
+      - A API deve estar disponível nos endereços configurados no docker-compose.yml (por exemplo, http://localhost:8080 para HTTP e https://localhost:8081 para HTTPS).
+      - Seguindo esses passos, você conseguirá executar a API e aplicar as migrations corretamente.
