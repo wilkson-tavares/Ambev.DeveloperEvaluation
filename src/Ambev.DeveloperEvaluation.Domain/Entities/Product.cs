@@ -1,4 +1,6 @@
+using Ambev.DeveloperEvaluation.Common.Validation;
 using Ambev.DeveloperEvaluation.Domain.Common;
+using Ambev.DeveloperEvaluation.Domain.Validation;
 using Ambev.DeveloperEvaluation.Domain.ValueObjects;
 
 namespace Ambev.DeveloperEvaluation.Domain.Entities;
@@ -37,4 +39,15 @@ public class Product : BaseEntity
     /// Gets or sets the rating of the product.
     /// </summary>
     public Rating Rating { get; set; } = new Rating(0,0);
+    
+    public ValidationResultDetail Validate()
+    {
+        var validator = new ProductValidator();
+        var result = validator.Validate(this);
+        return new ValidationResultDetail
+        {
+            IsValid = result.IsValid,
+            Errors = result.Errors.Select(o => (ValidationErrorDetail)o)
+        };
+    }
 }
